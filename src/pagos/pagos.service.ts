@@ -13,7 +13,13 @@ export class PagosService {
   ) {}
 
   async listar(): Promise<Pagos[]> {
-    return this.pagosRepository.find();
+      return this.pagosRepository
+            .createQueryBuilder("pagos") 
+            .select(['pagos', 'cliente.nome'])  
+            .innerJoin("pagos.cliente", "cliente") 
+            .orderBy("pagos.data", "ASC")
+            .getMany();
+    
   }
 
   async listarData(data: string): Promise<Pagos[]> {
