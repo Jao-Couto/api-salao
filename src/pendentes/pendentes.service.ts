@@ -19,7 +19,7 @@ export class PendentesService {
   async listarPendentes(): Promise<Pendentes[]> {
     return this.pendentesRepository
           .createQueryBuilder("pendentes") 
-          .select(['pendentes', 'cliente.nome'])  
+          .select(['pendentes', 'cliente.nome', 'cliente.id'])  
           .innerJoin("pendentes.cliente", "cliente") 
           .orderBy("pendentes.data", "ASC")
           .getMany();
