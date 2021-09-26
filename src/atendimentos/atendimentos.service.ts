@@ -19,7 +19,7 @@ export class AtendimentosService {
   async listarData(data: string): Promise<Atendimentos[]> {
     return this.atendimentosRepository
           .createQueryBuilder("atendimentos") 
-          .select(['atendimentos', 'cliente.nome', 'cliente.id'])
+          .select(['atendimentos', 'cliente.nome', 'cliente.id', 'cliente.celular'])
           .innerJoin("atendimentos.cliente", "cliente") 
           .where("atendimentos.data = '"+data+"'") 
           .getMany();
