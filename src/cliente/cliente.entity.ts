@@ -1,4 +1,3 @@
-import { Atendimentos } from 'src/atendimentos/atendimentos.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne, OneToMany } from 'typeorm';
 
 @Entity()
