@@ -18,9 +18,9 @@ export class UsuarioController {
         return this.usuarioService.findOne(id)
     }
 
-    @Get(':email')
-    async login(@Param('email') email: string): Promise<Usuario>{
-        return this.usuarioService.login(email)
+    @Post('login')
+    async login(@Body() data: UsuarioCadastrarDto): Promise<ResultadoDto>{
+        return this.usuarioService.login(data)
     }
 
     @Post('cadastrar')

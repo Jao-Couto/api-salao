@@ -3,7 +3,8 @@ import { ResultadoDto } from '../dto/resultado.dto';
 import { Repository } from 'typeorm';
 import { Usuario } from './usuario.entity';
 import { UsuarioCadastrarDto } from './dto/usuario.cadastrar.dto';
-import { genSalt, hash} from 'bcrypt'; 
+import { genSalt, hash, compare} from 'bcrypt'; 
+import { UsuarioLoginDto } from './dto/usuario.login.dto';
 
 @Injectable()
 export class UsuarioService {
@@ -16,10 +17,14 @@ export class UsuarioService {
     return this.usuarioRepository.find();
   }
 
-  async login(email: string){
-    return this.usuarioRepository.findOne({
-      email: email
+  async login(data: UsuarioLoginDto){
+    let usuario = this.usuarioRepository.findOne({
+      email: data.email
     });
+    let isMatch = await compare(data.senha, hash);
+    if(isMatch)
+      return usuario
+    return 'ERRO'
   }
 
   async findOne(id: number): Promise<Usuario> {
