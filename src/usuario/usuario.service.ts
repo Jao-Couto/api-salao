@@ -17,14 +17,21 @@ export class UsuarioService {
     return this.usuarioRepository.find();
   }
 
-  async login(data: UsuarioLoginDto): Promise<Usuario>{
+  async login(data: UsuarioLoginDto): Promise<ResultadoDto>{
     let usuario = this.usuarioRepository.findOne({
       email: data.email
     });
     let isMatch = await compare(data.senha, (await usuario).senha);
+    let id = (await usuario).id
     if(isMatch)
-      return usuario
-    return null
+      return <ResultadoDto>{
+        status:true,
+        mensagem: id.toString()
+      }
+    return <ResultadoDto>{
+      status:false,
+      mensagem: "Senha e/ou email incorreto"
+    }
   }
 
   async findOne(id: number): Promise<Usuario> {
