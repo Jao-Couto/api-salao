@@ -22,23 +22,31 @@ export class AtendimentosService {
   }
 
   async listarData(data: string, user:number): Promise<Atendimentos[]> {
-    let q = this.atendimentosRepository
-            .createQueryBuilder("atendimentos")
-            .select("atendimentos.id")
-            .innerJoin("pagos", "pagos", "pagos.atendimento = atendimentos.id")
-            .where("atendimentos.data = '"+data+"'")
-            .andWhere("cliente.usuario = "+user) 
-
-    return this.atendimentosRepository
-          .createQueryBuilder("atendimentos") 
-          .select(['atendimentos', 'cliente.nome', 'cliente.id', 'cliente.celular'])
-          .innerJoin("cliente", "cliente", "atendimentos.cliente = cliente.id") 
-          .where("atendimentos.data = '"+data+"'")
-          .andWhere("cliente.usuario = "+user) 
-          .andWhere("NOT EXISTS ("+q.getQuery()+")")
-          .getRawMany();
-    
-    
+    return this.atendimentosRepository.query(
+      `SELECT
+            atendimentos.id AS atendimentos_id,
+            atendimentos.data AS atendimentos_data,
+            atendimentos.hora AS atendimentos_hora,
+            atendimentos.descricao AS atendimentos_descricao,
+            atendimentos.valor AS atendimentos_valor,
+            atendimentos.clienteId AS atendimentos_clienteId,
+            cliente.id AS cliente_id,
+            cliente.nome AS cliente_nome,
+            cliente.celular AS cliente_celular
+        FROM
+            atendimentos atendimentos
+        INNER JOIN cliente cliente ON
+            atendimentos.clienteId = cliente.id
+        WHERE
+            atendimentos.data = '`+data+`' AND cliente.usuarioId = `+user+` AND NOT EXISTS(
+            SELECT
+                1
+            FROM
+                pagos
+            WHERE
+                pagos.atendimentoId = atendimentos.id
+            )`
+      );
   }
 
   async findOne(id: number): Promise<Atendimentos> {
