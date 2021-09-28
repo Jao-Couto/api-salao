@@ -21,6 +21,7 @@ export class UsuarioService {
     let usuario = this.usuarioRepository.findOne({
       email: data.email
     });
+    
     let isMatch = await compare(data.senha, (await usuario).senha);
     let id = (await usuario).id
     if(isMatch)

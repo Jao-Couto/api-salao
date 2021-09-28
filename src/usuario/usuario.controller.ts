@@ -3,6 +3,7 @@ import { ResultadoDto } from 'src/dto/resultado.dto';
 import { Usuario } from './usuario.entity';
 import { UsuarioService } from './usuario.service';
 import { UsuarioCadastrarDto } from './dto/usuario.cadastrar.dto';
+import { UsuarioLoginDto } from './dto/usuario.login.dto';
 
 @Controller('usuario')
 export class UsuarioController {
@@ -19,7 +20,7 @@ export class UsuarioController {
     }
 
     @Post('login')
-    async login(@Body() data: UsuarioCadastrarDto): Promise<ResultadoDto>{
+    async login(@Body() data: UsuarioLoginDto): Promise<ResultadoDto>{
         return this.usuarioService.login(data)
     }
 
