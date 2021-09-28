@@ -22,13 +22,23 @@ export class AtendimentosService {
   }
 
   async listarData(data: string, user:number): Promise<Atendimentos[]> {
+    let q = this.atendimentosRepository
+            .createQueryBuilder("atendimentos")
+            .select("atendimentos.id")
+            .innerJoin("pagos", "pagos", "pagos.atendimento = atendimentos.id")
+            .where("atendimentos.data = '"+data+"'")
+            .andWhere("cliente.usuario = "+user) 
+
     return this.atendimentosRepository
           .createQueryBuilder("atendimentos") 
           .select(['atendimentos', 'cliente.nome', 'cliente.id', 'cliente.celular'])
-          .innerJoin("atendimentos.cliente", "cliente") 
+          .innerJoin("cliente", "cliente", "atendimentos.cliente = cliente.id") 
           .where("atendimentos.data = '"+data+"'")
           .andWhere("cliente.usuario = "+user) 
-          .getMany();
+          .andWhere("NOT EXISTS ("+q.getQuery()+")")
+          .getRawMany();
+    
+    
   }
 
   async findOne(id: number): Promise<Atendimentos> {
