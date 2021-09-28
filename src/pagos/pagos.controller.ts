@@ -8,9 +8,9 @@ import { PagosCadastrarDto } from './dto/pagos.cadastrar.dto';
 export class PagosController {
   constructor(private readonly pagosService: PagosService) {}
 
-    @Get('listar')
-    async listar(): Promise<Pagos[]>{
-        return this.pagosService.listar()
+    @Get('listar:user')
+    async listar(@Param('user') user:number): Promise<Pagos[]>{
+        return this.pagosService.listar(user)
     }
 
     @Post('cadastrar')
@@ -18,9 +18,9 @@ export class PagosController {
         return this.pagosService.cadastrar(data)
     }
 
-    @Get('data/:data')
-    async listarData(@Param('data') data: string): Promise<Pagos[]>{
-        return this.pagosService.listarData(data)
+    @Get('data:user/:data')
+    async listarData(@Param('user') user:number, @Param('data') data: string): Promise<Pagos[]>{
+        return this.pagosService.listarData(user, data)
     }
 
     @Get('id/:id')

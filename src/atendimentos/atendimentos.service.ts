@@ -12,16 +12,22 @@ export class AtendimentosService {
     private atendimentosRepository: Repository<Atendimentos>,
   ) {}
 
-  async listar(): Promise<Atendimentos[]> {
-    return this.atendimentosRepository.find();
+  async listar(user:number): Promise<Atendimentos[]> {
+    return this.atendimentosRepository
+    .createQueryBuilder("atendimentos") 
+    .select(['atendimentos', 'cliente.nome', 'cliente.id', 'cliente.celular'])
+    .innerJoin("atendimentos.cliente", "cliente") 
+    .where("cliente.usuario = "+user) 
+    .getMany();
   }
 
-  async listarData(data: string): Promise<Atendimentos[]> {
+  async listarData(data: string, user:number): Promise<Atendimentos[]> {
     return this.atendimentosRepository
           .createQueryBuilder("atendimentos") 
           .select(['atendimentos', 'cliente.nome', 'cliente.id', 'cliente.celular'])
           .innerJoin("atendimentos.cliente", "cliente") 
-          .where("atendimentos.data = '"+data+"'") 
+          .where("atendimentos.data = '"+data+"'")
+          .andWhere("cliente.usuario = "+user) 
           .getMany();
   }
 

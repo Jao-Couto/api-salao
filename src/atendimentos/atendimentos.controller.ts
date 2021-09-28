@@ -8,9 +8,9 @@ import { AtendimentosCadastrarDto } from './dto/atendimentos.cadastrar.dto';
 export class AtendimentosController {
   constructor(private readonly atendimentosService: AtendimentosService) {}
 
-    @Get('listar')
-    async listar(): Promise<Atendimentos[]>{
-        return this.atendimentosService.listar()
+    @Get('listar/:user')
+    async listar(@Param("user") user:number): Promise<Atendimentos[]>{
+        return this.atendimentosService.listar(user)
     }
 
     @Post('cadastrar')
@@ -18,9 +18,9 @@ export class AtendimentosController {
         return this.atendimentosService.cadastrar(data)
     }
 
-    @Get('data/:data')
-    async listarData(@Param('data') data: string): Promise<Atendimentos[]>{
-        return this.atendimentosService.listarData(data)
+    @Get('data:user/:data')
+    async listarData(@Param('data') data: string, @Param("user") user:number): Promise<Atendimentos[]>{
+        return this.atendimentosService.listarData(data, user)
     }
 
     @Get('id/:id')

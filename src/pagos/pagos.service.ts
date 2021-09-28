@@ -12,40 +12,45 @@ export class PagosService {
     private pagosRepository: Repository<Pagos>,
   ) {}
 
-  async listar(): Promise<Pagos[]> {
-      return this.pagosRepository
-            .createQueryBuilder("pagos") 
-            .select(['pagos', 'cliente.nome'])  
-            .innerJoin("pagos.cliente", "cliente") 
-            .orderBy("pagos.data", "ASC")
-            .getMany();
-    
+  async listar(user: number): Promise<Pagos[]> {
+    return this.pagosRepository
+        .createQueryBuilder("pagos")
+        .select('pagos.dataPago')
+        .addSelect('atendimentos.*')
+        .addSelect('cliente.nome', 'cliente_nome')
+        .innerJoin("atendimentos", 'atendimentos', 'pagos.atendimento = atendimentos.id') 
+        .innerJoin("cliente", 'cliente', 'atendimentos.cliente = cliente.id') 
+        .where("cliente.usuario = '"+user+"'") 
+        .orderBy("atendimentos.data", "ASC")
+        .getRawMany();
   }
 
-  async listarData(data: string): Promise<Pagos[]> {
+  async listarData(user: number, data: string): Promise<Pagos[]> {
     return this.pagosRepository
-          .createQueryBuilder("pagos") 
-          .select(['pagos', 'cliente.nome'])  
-          .innerJoin("pagos.cliente", "cliente") 
-          .where("pagos.data = '"+data+"'") 
-          .getMany();
+          .createQueryBuilder("pagos")
+          .select('pagos.dataPago')
+          .addSelect('atendimentos.*')
+          .addSelect('cliente.nome', 'cliente_nome')
+          .innerJoin("atendimentos", 'atendimentos', 'pagos.atendimento = atendimentos.id') 
+          .innerJoin("cliente", 'cliente', 'atendimentos.cliente = cliente.id') 
+          .where("cliente.usuario = '"+user+"'") 
+          .where("atendimentos.data = '"+data+"'") 
+          .orderBy("atendimentos.data", "ASC")
+          .getRawMany();
+            
   }
 
   async findOne(id: number): Promise<Pagos> {
     return this.pagosRepository.findOne({
-      id: id
+      atendimento: id
     });
   }
 
 
   async cadastrar(data: PagosCadastrarDto): Promise<ResultadoDto>{
     let pagos = new Pagos();
-    pagos.data = data.data
     pagos.dataPago = data.dataPago
-    pagos.hora = data.hora
-    pagos.descricao = data.descricao
-    pagos.valor = data.valor
-    pagos.cliente = data.cliente
+    pagos.atendimento = data.atendimento
     return this.pagosRepository.save(pagos)
     .then((result)=>{
         return <ResultadoDto>{
