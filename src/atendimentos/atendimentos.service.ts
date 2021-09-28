@@ -24,15 +24,13 @@ export class AtendimentosService {
   async listarData(data: string, user:number): Promise<Atendimentos[]> {
     return this.atendimentosRepository.query(
       `SELECT
-            atendimentos.id AS atendimentos_id,
-            atendimentos.data AS atendimentos_data,
-            atendimentos.hora AS atendimentos_hora,
-            atendimentos.descricao AS atendimentos_descricao,
-            atendimentos.valor AS atendimentos_valor,
-            atendimentos.clienteId AS atendimentos_clienteId,
-            cliente.id AS cliente_id,
-            cliente.nome AS cliente_nome,
-            cliente.celular AS cliente_celular
+            atendimentos.id AS id,
+            atendimentos.data AS data,
+            atendimentos.hora AS hora,
+            atendimentos.descricao AS descricao,
+            atendimentos.valor AS valor,
+            cliente.nome AS nome,
+            cliente.celular AS celular
         FROM
             atendimentos atendimentos
         INNER JOIN cliente cliente ON
