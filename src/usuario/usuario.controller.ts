@@ -19,7 +19,7 @@ export class UsuarioController {
     }
 
     @Post('login')
-    async login(@Body() data: UsuarioCadastrarDto): Promise<ResultadoDto>{
+    async login(@Body() data: UsuarioCadastrarDto): Promise<Usuario>{
         return this.usuarioService.login(data)
     }
 

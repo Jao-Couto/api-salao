@@ -13,9 +13,6 @@ export class Usuario {
   email: string;
 
   @Column({length: 128})
-  salt: string;
-
-  @Column({length: 128})
   senha: string;
 
   @Column({ length: 14 })
