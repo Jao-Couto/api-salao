@@ -11,19 +11,24 @@ export class ClienteService {
     private clienteRepository: Repository<Cliente>,
   ) {}
 
-  async listar(): Promise<Cliente[]> {
-    return this.clienteRepository.find();
+  async listar(user: number): Promise<Cliente[]> {
+    return this.clienteRepository.find({
+      usuario: user
+    });
   }
 
-  async findOne(id: number): Promise<Cliente> {
+  async findOne(user:number, id: number): Promise<Cliente> {
     return this.clienteRepository.findOne({
-      id: id
+      id: id,
+      usuario: user
     });
   }
 
   
 
   async cadastrar(data: ClienteCadastrarDto): Promise<ResultadoDto>{
+    console.log(data);
+    
     let cliente = new Cliente();
     cliente.nome = data.nome
     cliente.cpf = data.cpf
@@ -33,6 +38,7 @@ export class ClienteService {
     cliente.cidade= data.cidade
     cliente.celular= data.celular
     cliente.nascimento= data.nascimento
+    cliente.usuario = data.usuario
     return this.clienteRepository.save(cliente)
     .then((result)=>{
         return <ResultadoDto>{

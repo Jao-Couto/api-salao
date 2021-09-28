@@ -8,17 +8,15 @@ import { ClienteCadastrarDto } from './dto/cliente.cadastrar.dto';
 export class ClienteController {
   constructor(private readonly clienteService: ClienteService) {}
 
-    @Get('listar')
-    async listar(): Promise<Cliente[]>{
-        return this.clienteService.listar()
+    @Get('listar:user')
+    async listar(@Param('user') user:number): Promise<Cliente[]>{
+        return this.clienteService.listar(user)
     }
 
-    @Get(':id')
-    async listarID(@Param('id') id: number): Promise<Cliente>{
-        return this.clienteService.findOne(id)
+    @Get(':user/:id')
+    async listarID(@Param('user') user: number, @Param('id') id: number): Promise<Cliente>{
+        return this.clienteService.findOne(user, id)
     }
-
-    
 
     @Post('cadastrar')
     async cadastrar(@Body() data: ClienteCadastrarDto): Promise<ResultadoDto>{
