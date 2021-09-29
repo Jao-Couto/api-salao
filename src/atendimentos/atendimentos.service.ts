@@ -36,14 +36,21 @@ export class AtendimentosService {
         INNER JOIN cliente cliente ON
             atendimentos.clienteId = cliente.id
         WHERE
-            atendimentos.data = '`+data+`' AND cliente.usuarioId = `+user+` AND NOT EXISTS(
+            atendimentos.data = '`+data+`' AND cliente.usuarioId = `+user+` AND NOT EXISTS (
             SELECT
                 1
             FROM
                 pagos
             WHERE
                 pagos.atendimentoId = atendimentos.id
-            )`
+            ) AND NOT EXISTS(
+              SELECT
+                  1
+              FROM
+                  pendentes
+              WHERE
+                  pendentes.atendimentoId = atendimentos.id
+              )`
       );
   }
 
