@@ -16,13 +16,16 @@ export class PendentesService {
     return this.pendentesRepository.find();
   }
 
-  async listarPendentes(): Promise<Pendentes[]> {
+  async listarPendentes(user:number): Promise<Pendentes[]> {
     return this.pendentesRepository
-          .createQueryBuilder("pendentes") 
-          .select(['pendentes', 'cliente.nome', 'cliente.id'])  
-          .innerJoin("pendentes.cliente", "cliente") 
-          .orderBy("pendentes.data", "ASC")
-          .getMany();
+          .createQueryBuilder("pendentes")
+          .addSelect('atendimentos.*')
+          .addSelect('cliente.nome', 'cliente_nome')
+          .innerJoin("atendimentos", 'atendimentos', 'pendentes.atendimento = atendimentos.id') 
+          .innerJoin("cliente", 'cliente', 'atendimentos.cliente = cliente.id') 
+          .where("cliente.usuario = '"+user+"'") 
+          .orderBy("atendimentos.data", "ASC")
+          .getRawMany();
   }
 
   async findOne(id: number): Promise<Pendentes> {
@@ -50,16 +53,12 @@ export class PendentesService {
 
   async cadastrar(data: PendentesCadastrarDto): Promise<ResultadoDto>{
     let pendentes = new Pendentes();
-    pendentes.data = data.data
-    pendentes.hora = data.hora
-    pendentes.descricao = data.descricao
-    pendentes.valor = data.valor
-    pendentes.cliente = data.cliente
+    pendentes.atendimento = data.atendimento
     return this.pendentesRepository.save(pendentes)
     .then((result)=>{
         return <ResultadoDto>{
             status:true,
-            mensagem: "Pendente cadastrado"
+            mensagem: "Fiado cadastrado"
         }
     })
     .catch((error)=>{

@@ -8,19 +8,15 @@ import { PendentesCadastrarDto } from './dto/pendentes.cadastrar.dto';
 export class PendentesController {
   constructor(private readonly pendentesService: PendentesService) {}
 
-    @Get('asdsa')
-    async listar(): Promise<Pendentes[]>{
-        return this.pendentesService.listar()
-    }
 
     @Post('cadastrar')
     async cadastrar(@Body() data: PendentesCadastrarDto): Promise<ResultadoDto>{
         return this.pendentesService.cadastrar(data)
     }
 
-    @Get('listar')
-    async listarPendentes(): Promise<Pendentes[]>{
-        return this.pendentesService.listarPendentes()
+    @Get('listar:user')
+    async listarPendentes(@Param('user') user:number): Promise<Pendentes[]>{
+        return this.pendentesService.listarPendentes(user)
     }
 
     @Get('id/:id')
