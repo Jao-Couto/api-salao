@@ -6,10 +6,10 @@ export class Cliente {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 50 })
+  @Column({ length: 50, nullable:false})
   nome: string;
 
-  @Column({ length: 14 })
+  @Column({ length: 14, nullable:false, unique: true})
   cpf: string;
 
   @Column({ length: 50 })

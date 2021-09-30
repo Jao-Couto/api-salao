@@ -6,9 +6,10 @@ import { AtendimentosModule} from './atendimentos/atendimentos.module';
 import { PagosModule } from './pagos/pagos.module';
 import { PendentesModule } from './pendentes/pendentes.module';
 import { UsuarioModule } from './usuario/usuario.module';
+import { ServicosModule } from './servicos/servicos.module';
 
 @Module({
-  imports: [ClienteModule, AtendimentosModule, PagosModule, PendentesModule, UsuarioModule],
+  imports: [ClienteModule, AtendimentosModule, PagosModule, PendentesModule, UsuarioModule, ServicosModule],
   controllers: [AppController],
   providers: [AppService],
 })
