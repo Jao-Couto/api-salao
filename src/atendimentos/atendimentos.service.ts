@@ -15,8 +15,9 @@ export class AtendimentosService {
   async listar(user:number): Promise<Atendimentos[]> {
     return this.atendimentosRepository
     .createQueryBuilder("atendimentos") 
-    .select(['atendimentos', 'cliente.nome', 'cliente.id', 'cliente.celular'])
+    .select(['atendimentos', 'cliente.nome', 'cliente.celular', "servicos.nome as servico", "servico.valor"])
     .innerJoin("atendimentos.cliente", "cliente") 
+    .innerJoin("atendimentos.servico", "servicos")
     .where("cliente.usuario = "+user) 
     .getMany();
   }
@@ -27,14 +28,14 @@ export class AtendimentosService {
             atendimentos.id AS id,
             atendimentos.data AS data,
             atendimentos.hora AS hora,
-            atendimentos.descricao AS descricao,
-            atendimentos.valor AS valor,
+            servicos.nome AS descricao,
+            servicos.valor AS valor,
             cliente.nome AS nome,
             cliente.celular AS celular
         FROM
-            atendimentos atendimentos
-        INNER JOIN cliente cliente ON
-            atendimentos.clienteId = cliente.id
+            atendimentos
+        INNER JOIN cliente ON atendimentos.clienteId = cliente.id
+        INNER JOIN servicos ON servicos.id = atendimentos.servicoId
         WHERE
             atendimentos.data = '`+data+`' AND cliente.usuarioId = `+user+` AND NOT EXISTS (
             SELECT
@@ -80,7 +81,7 @@ export class AtendimentosService {
     let atendimento = new Atendimentos();
     atendimento.data = data.data
     atendimento.hora = data.hora
-    atendimento.descricao = data.descricao
+    atendimento.servico = data.servico
     atendimento.valor = data.valor
     atendimento.cliente = data.cliente
     return this.atendimentosRepository.save(atendimento)

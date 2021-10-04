@@ -1,4 +1,5 @@
 import { Cliente } from 'src/cliente/cliente.entity';
+import { Servicos } from 'src/servicos/servicos.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne, ManyToOne } from 'typeorm';
 
 @Entity()
@@ -12,11 +13,10 @@ export class Atendimentos {
   @Column('time', {nullable:false})
   hora: string;
 
-  @Column({length: 255, nullable:false})
-  descricao: string;
-
   @Column('float', {nullable:false})
   valor: number;
 
   @ManyToOne(type => Cliente, cliente => cliente.id, {nullable:false}) cliente: number;
+
+  @ManyToOne(type => Servicos, servico => servico.id, {nullable:false}) servico: number;
 }

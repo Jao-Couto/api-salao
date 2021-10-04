@@ -2,6 +2,6 @@ export interface AtendimentosCadastrarDto{
     cliente: number;
     data: string;
     hora: string;
-    descricao: string;
+    servico: number;
     valor: number;
   }
