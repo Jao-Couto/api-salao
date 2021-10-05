@@ -9,13 +9,13 @@ export class Usuario {
   @Column({ length: 100 })
   nome: string;
   
-  @Column({ length: 100, unique: true })
+  @Column({ length: 100 })
   email: string;
 
   @Column({length: 128})
   senha: string;
 
-  @Column({ length: 14, unique: true })
+  @Column({ length: 14 })
   cpf: string;
 
 }
