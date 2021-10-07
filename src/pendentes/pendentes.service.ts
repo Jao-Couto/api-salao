@@ -19,10 +19,14 @@ export class PendentesService {
   async listarPendentes(user:number): Promise<Pendentes[]> {
     return this.pendentesRepository
           .createQueryBuilder("pendentes")
-          .addSelect('atendimentos.*')
+          .select('atendimentos.data, atendimentos.hora, pendentes.id as pendentes_id')
           .addSelect('cliente.nome', 'cliente_nome')
+          .addSelect('cliente.celular')
+          .addSelect("servicos.nome", "servico")
+          .addSelect("servicos.valor", "valor")
           .innerJoin("atendimentos", 'atendimentos', 'pendentes.atendimento = atendimentos.id') 
           .innerJoin("cliente", 'cliente', 'atendimentos.cliente = cliente.id') 
+          .innerJoin("servicos", "servicos", "atendimentos.servico = servicos.id")
           .where("cliente.usuario = '"+user+"'") 
           .orderBy("atendimentos.data", "ASC")
           .getRawMany();

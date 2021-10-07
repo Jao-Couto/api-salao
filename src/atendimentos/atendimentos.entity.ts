@@ -13,9 +13,6 @@ export class Atendimentos {
   @Column('time', {nullable:false})
   hora: string;
 
-  @Column('float', {nullable:false})
-  valor: number;
-
   @ManyToOne(type => Cliente, cliente => cliente.id, {nullable:false}) cliente: number;
 
   @ManyToOne(type => Servicos, servico => servico.id, {nullable:false}) servico: number;

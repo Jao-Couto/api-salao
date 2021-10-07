@@ -15,11 +15,14 @@ export class PagosService {
   async listar(user: number): Promise<Pagos[]> {
     return this.pagosRepository
         .createQueryBuilder("pagos")
-        .select('pagos.dataPago')
-        .addSelect('atendimentos.*')
+        .select('pagos.dataPago, pagos.id')
+        .addSelect('atendimentos.data, atendimentos.hora ')
         .addSelect('cliente.nome', 'cliente_nome')
+        .addSelect("servicos.nome", "servico")
+        .addSelect("servicos.valor", "valor")
         .innerJoin("atendimentos", 'atendimentos', 'pagos.atendimento = atendimentos.id') 
         .innerJoin("cliente", 'cliente', 'atendimentos.cliente = cliente.id') 
+        .innerJoin("servicos", "servicos", "atendimentos.servico = servicos.id")
         .where("cliente.usuario = '"+user+"'") 
         .orderBy("atendimentos.data", "ASC")
         .getRawMany();
