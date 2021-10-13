@@ -26,9 +26,7 @@ export class ClienteService {
 
   
 
-  async cadastrar(data: ClienteCadastrarDto): Promise<ResultadoDto>{
-    console.log(data);
-    
+  async cadastrar(data: ClienteCadastrarDto): Promise<ResultadoDto>{    
     let cliente = new Cliente();
     cliente.nome = data.nome
     cliente.cpf = data.cpf

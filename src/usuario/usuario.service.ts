@@ -21,7 +21,9 @@ export class UsuarioService {
     let usuario = this.usuarioRepository.findOne({
       email: data.email
     });
+
     
+    if(await usuario != undefined){
     let isMatch = await compare(data.senha, (await usuario).senha);
     let id = (await usuario).id
     if(isMatch)
@@ -29,6 +31,7 @@ export class UsuarioService {
         status:true,
         mensagem: id.toString()
       }
+    }else
     return <ResultadoDto>{
       status:false,
       mensagem: "Senha e/ou email incorreto"
