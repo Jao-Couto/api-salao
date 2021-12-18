@@ -18,14 +18,12 @@ export class AtendimentosService {
             atendimentos.id AS id,
             atendimentos.data AS data,
             atendimentos.hora AS hora,
-            servicos.nome AS descricao,
-            servicos.valor AS valor,
+            atendimentos.valorTotal,
             cliente.nome AS nome,
             cliente.celular AS celular
         FROM
             atendimentos
         INNER JOIN cliente ON atendimentos.clienteId = cliente.id
-        INNER JOIN servicos ON servicos.id = atendimentos.servicoId
         WHERE
             cliente.usuarioId = `+ user + ` AND NOT EXISTS (
             SELECT
@@ -51,14 +49,12 @@ export class AtendimentosService {
             atendimentos.id AS id,
             atendimentos.data AS data,
             atendimentos.hora AS hora,
-            servicos.nome AS descricao,
-            servicos.valor AS valor,
+            atendimentos.valorTotal,
             cliente.nome AS nome,
             cliente.celular AS celular
         FROM
             atendimentos
         INNER JOIN cliente ON atendimentos.clienteId = cliente.id
-        INNER JOIN servicos ON servicos.id = atendimentos.servicoId
         WHERE
             atendimentos.data = '`+ data + `' AND cliente.usuarioId = ` + user + ` AND NOT EXISTS (
             SELECT
@@ -85,6 +81,7 @@ export class AtendimentosService {
         FROM
             atendimentos
             INNER JOIN cliente ON atendimentos.clienteId = cliente.id
+            
         WHERE
             atendimentos.data = '`+ data + `' AND cliente.usuarioId = ` + user + ` AND NOT EXISTS (
             SELECT
@@ -130,13 +127,13 @@ export class AtendimentosService {
         let atendimento = new Atendimentos();
         atendimento.data = data.data
         atendimento.hora = data.hora
-        atendimento.servico = data.servico
         atendimento.cliente = data.cliente
+        atendimento.valorTotal = data.valor
         return this.atendimentosRepository.save(atendimento)
             .then((result) => {
                 return <ResultadoDto>{
                     status: true,
-                    mensagem: "Horário marcado"
+                    mensagem: '' + result.id
                 }
             })
             .catch((error) => {

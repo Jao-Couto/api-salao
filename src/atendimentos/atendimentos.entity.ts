@@ -7,13 +7,14 @@ export class Atendimentos {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('date', {nullable:false})
+  @Column('date', { nullable: false })
   data: string;
 
-  @Column('time', {nullable:false})
+  @Column('time', { nullable: false })
   hora: string;
 
-  @ManyToOne(type => Cliente, cliente => cliente.id, {nullable:false}) cliente: number;
+  @Column('float', { nullable: false })
+  valorTotal: number;
 
-  @ManyToOne(type => Servicos, servico => servico.id, {nullable:false}) servico: number;
+  @ManyToOne(type => Cliente, cliente => cliente.id, { nullable: false }) cliente: number;
 }
