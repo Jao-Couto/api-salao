@@ -23,11 +23,6 @@ export class ServicosMarcadosController {
         return this.servicosMarcadosService.cadastrar(data)
     }
 
-    @Get('atendimentos/:id')
-    async listarID(@Param('id') id: number): Promise<ServicosMarcados[]> {
-        return this.servicosMarcadosService.find(id)
-    }
-
     @Delete('delete/:id')
     async deletarId(@Param('id') id: number): Promise<ResultadoDto> {
         return this.servicosMarcadosService.deletarId(id)

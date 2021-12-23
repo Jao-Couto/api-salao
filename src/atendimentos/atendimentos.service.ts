@@ -20,10 +20,13 @@ export class AtendimentosService {
             atendimentos.hora AS hora,
             atendimentos.valorTotal,
             cliente.nome AS nome,
-            cliente.celular AS celular
+            cliente.celular AS celular,
+            group_concat(servicos.nome separator ', ') as servicos
         FROM
             atendimentos
         INNER JOIN cliente ON atendimentos.clienteId = cliente.id
+        INNER JOIN servicos_marcados on servicos_marcados.atendimento_id = atendimentos.id 
+        INNER JOIN servicos ON servicos.id = servicos_marcados.servico_id
         WHERE
             cliente.usuarioId = `+ user + ` AND NOT EXISTS (
             SELECT
@@ -39,7 +42,8 @@ export class AtendimentosService {
                   pendentes
               WHERE
                   pendentes.atendimentoId = atendimentos.id
-              )`
+              )
+              GROUP BY atendimentos.id`
         );
     }
 
@@ -51,10 +55,13 @@ export class AtendimentosService {
             atendimentos.hora AS hora,
             atendimentos.valorTotal,
             cliente.nome AS nome,
-            cliente.celular AS celular
+            cliente.celular AS celular,
+            group_concat(servicos.nome separator ', ') as servicos
         FROM
             atendimentos
         INNER JOIN cliente ON atendimentos.clienteId = cliente.id
+        INNER JOIN servicos_marcados on servicos_marcados.atendimento_id = atendimentos.id 
+        INNER JOIN servicos ON servicos.id = servicos_marcados.servico_id
         WHERE
             atendimentos.data = '`+ data + `' AND cliente.usuarioId = ` + user + ` AND NOT EXISTS (
             SELECT
@@ -70,7 +77,9 @@ export class AtendimentosService {
                   pendentes
               WHERE
                   pendentes.atendimentoId = atendimentos.id
-              )`
+              )
+        GROUP BY atendimentos.id
+        ORDER BY atendimentos.hora`
         );
     }
 

@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import { ResultadoDto } from 'src/dto/resultado.dto';
 import { Repository } from 'typeorm';
 import { Pendentes } from './pendentes.entity';
-import {PendentesCadastrarDto } from './dto/pendentes.cadastrar.dto';
+import { PendentesCadastrarDto } from './dto/pendentes.cadastrar.dto';
 
 
 @Injectable()
@@ -10,26 +10,32 @@ export class PendentesService {
   constructor(
     @Inject('PENDENTES_REPOSITORY')
     private pendentesRepository: Repository<Pendentes>,
-  ) {}
+  ) { }
 
   async listar(): Promise<Pendentes[]> {
     return this.pendentesRepository.find();
   }
 
-  async listarPendentes(user:number): Promise<Pendentes[]> {
-    return this.pendentesRepository
-          .createQueryBuilder("pendentes")
-          .select('atendimentos.data, atendimentos.hora, pendentes.id as pendentes_id')
-          .addSelect('cliente.nome', 'cliente_nome')
-          .addSelect('cliente.celular')
-          .addSelect("servicos.nome", "servico")
-          .addSelect("servicos.valor", "valor")
-          .innerJoin("atendimentos", 'atendimentos', 'pendentes.atendimento = atendimentos.id') 
-          .innerJoin("cliente", 'cliente', 'atendimentos.cliente = cliente.id') 
-          .innerJoin("servicos", "servicos", "atendimentos.servico = servicos.id")
-          .where("cliente.usuario = '"+user+"'") 
-          .orderBy("atendimentos.data", "ASC")
-          .getRawMany();
+  async listarPendentes(user: number): Promise<Pendentes[]> {
+    return this.pendentesRepository.query(
+      `SELECT 
+        atendimentos.data, 
+        atendimentos.hora, 
+        pendentes.id as pendentes_id, 
+        cliente.nome as cliente_nome, 
+        cliente.celular, 
+        atendimentos.valorTotal as valorTotal, 
+        group_concat(servicos.nome separator ', ') as servicos
+      FROM pendentes
+        INNER JOIN atendimentos on pendentes.atendimentoId = atendimentos.id
+        INNER JOIN cliente on atendimentos.clienteId = cliente.id
+        INNER JOIN servicos_marcados on atendimentos.id = servicos_marcados.atendimento_id
+        INNER JOIN servicos on servicos.id = servicos_marcados.servico_id
+      WHERE 
+        cliente.usuarioId = '` + user + `'
+      GROUP BY atendimentos.id
+      ORDER BY atendimentos.data ASC
+      `)
   }
 
   async findOne(id: number): Promise<Pendentes> {
@@ -38,39 +44,39 @@ export class PendentesService {
     });
   }
 
-  async deletarId(id: number): Promise<ResultadoDto>{
-    return this.pendentesRepository.delete({id:id})
-    .then((result)=>{
-      return <ResultadoDto>{
-          status:true,
+  async deletarId(id: number): Promise<ResultadoDto> {
+    return this.pendentesRepository.delete({ id: id })
+      .then((result) => {
+        return <ResultadoDto>{
+          status: true,
           mensagem: "Pendente Deletado"
-      }
-  })
-  .catch((error)=>{
-      return <ResultadoDto>{
-          status:false,
+        }
+      })
+      .catch((error) => {
+        return <ResultadoDto>{
+          status: false,
           mensagem: error
-      }
-  })
+        }
+      })
   }
 
 
-  async cadastrar(data: PendentesCadastrarDto): Promise<ResultadoDto>{
+  async cadastrar(data: PendentesCadastrarDto): Promise<ResultadoDto> {
     let pendentes = new Pendentes();
     pendentes.atendimento = data.atendimento
     return this.pendentesRepository.save(pendentes)
-    .then((result)=>{
+      .then((result) => {
         return <ResultadoDto>{
-            status:true,
-            mensagem: "Fiado cadastrado"
+          status: true,
+          mensagem: "Fiado cadastrado"
         }
-    })
-    .catch((error)=>{
+      })
+      .catch((error) => {
         return <ResultadoDto>{
-            status:false,
-            mensagem: error
+          status: false,
+          mensagem: error
         }
-    })
+      })
   }
 
 }
