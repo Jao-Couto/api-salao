@@ -1,4 +1,5 @@
-export interface ClienteCadastrarDto{
+export interface ClienteCadastrarDto {
+  id: number;
   nome: string;
   cpf: string;
   rua: string;
@@ -7,5 +8,5 @@ export interface ClienteCadastrarDto{
   cidade: string;
   celular: string;
   nascimento: string;
-  usuario:number
+  usuario: number
 }
