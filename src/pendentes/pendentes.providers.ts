@@ -1,6 +1,5 @@
-import { Connection, Repository } from 'typeorm';
+import { Connection } from 'typeorm';
 import { Pendentes } from './pendentes.entity';
-
 
 export const pendentesProviders = [
   {

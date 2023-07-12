@@ -6,25 +6,31 @@ import { ServicosMarcadosCadastrarDto } from './dto/servicosMarcados.cadastrar.d
 
 @Controller('servicosMarcados')
 export class ServicosMarcadosController {
-    constructor(private readonly servicosMarcadosService: ServicosMarcadosService) { }
+  constructor(
+    private readonly servicosMarcadosService: ServicosMarcadosService,
+  ) {}
 
-    @Get()
-    getHello(): string {
-        return this.servicosMarcadosService.getHello();
-    }
+  @Get()
+  getHello(): string {
+    return this.servicosMarcadosService.getHello();
+  }
 
-    @Get('listar/:atendimento')
-    async listar(@Param("atendimento") atendimento: number): Promise<ServicosMarcados[]> {
-        return this.servicosMarcadosService.listar(atendimento)
-    }
+  @Get('listar/:atendimento')
+  async listar(
+    @Param('atendimento') atendimento: number,
+  ): Promise<ServicosMarcados[]> {
+    return this.servicosMarcadosService.listar(atendimento);
+  }
 
-    @Post('cadastrar')
-    async cadastrar(@Body() data: ServicosMarcadosCadastrarDto): Promise<ResultadoDto> {
-        return this.servicosMarcadosService.cadastrar(data)
-    }
+  @Post('cadastrar')
+  async cadastrar(
+    @Body() data: ServicosMarcadosCadastrarDto,
+  ): Promise<ResultadoDto> {
+    return this.servicosMarcadosService.cadastrar(data);
+  }
 
-    @Delete('delete/:id')
-    async deletarId(@Param('id') id: number): Promise<ResultadoDto> {
-        return this.servicosMarcadosService.deletarId(id)
-    }
+  @Delete('delete/:id')
+  async deletarId(@Param('id') id: number): Promise<ResultadoDto> {
+    return this.servicosMarcadosService.deletarId(id);
+  }
 }

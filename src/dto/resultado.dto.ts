@@ -1,4 +1,4 @@
-export interface ResultadoDto{
-    status:boolean;
-    mensagem: string;
+export interface ResultadoDto {
+  status: boolean;
+  mensagem: string;
 }

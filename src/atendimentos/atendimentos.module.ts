@@ -7,9 +7,6 @@ import { AtendimentosService } from './atendimentos.service';
 @Module({
   imports: [DatabaseModule],
   controllers: [AtendimentosController],
-  providers: [
-    ...atendimentosProviders,
-    AtendimentosService,
-  ],
+  providers: [...atendimentosProviders, AtendimentosService],
 })
 export class AtendimentosModule {}

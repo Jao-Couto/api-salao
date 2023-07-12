@@ -4,13 +4,12 @@ import { Repository } from 'typeorm';
 import { Pendentes } from './pendentes.entity';
 import { PendentesCadastrarDto } from './dto/pendentes.cadastrar.dto';
 
-
 @Injectable()
 export class PendentesService {
   constructor(
     @Inject('PENDENTES_REPOSITORY')
     private pendentesRepository: Repository<Pendentes>,
-  ) { }
+  ) {}
 
   async listar(): Promise<Pendentes[]> {
     return this.pendentesRepository.find();
@@ -32,51 +31,54 @@ export class PendentesService {
         INNER JOIN servicos_marcados on atendimentos.id = servicos_marcados.atendimento_id
         INNER JOIN servicos on servicos.id = servicos_marcados.servico_id
       WHERE 
-        cliente.usuarioId = '` + user + `'
+        cliente.usuarioId = '` +
+        user +
+        `'
       GROUP BY atendimentos.id
       ORDER BY atendimentos.data ASC
-      `)
+      `,
+    );
   }
 
   async findOne(id: number): Promise<Pendentes> {
     return this.pendentesRepository.findOne({
-      id: id
+      id: id,
     });
   }
 
   async deletarId(id: number): Promise<ResultadoDto> {
-    return this.pendentesRepository.delete({ id: id })
-      .then((result) => {
+    return this.pendentesRepository
+      .delete({ id: id })
+      .then(() => {
         return <ResultadoDto>{
           status: true,
-          mensagem: "Pendente Deletado"
-        }
+          mensagem: 'Pendente Deletado',
+        };
       })
       .catch((error) => {
         return <ResultadoDto>{
           status: false,
-          mensagem: error
-        }
-      })
+          mensagem: error,
+        };
+      });
   }
-
 
   async cadastrar(data: PendentesCadastrarDto): Promise<ResultadoDto> {
-    let pendentes = new Pendentes();
-    pendentes.atendimento = data.atendimento
-    return this.pendentesRepository.save(pendentes)
-      .then((result) => {
+    const pendentes = new Pendentes();
+    pendentes.atendimento = data.atendimento;
+    return this.pendentesRepository
+      .save(pendentes)
+      .then(() => {
         return <ResultadoDto>{
           status: true,
-          mensagem: "Fiado cadastrado"
-        }
+          mensagem: 'Fiado cadastrado',
+        };
       })
       .catch((error) => {
         return <ResultadoDto>{
           status: false,
-          mensagem: error
-        }
-      })
+          mensagem: error,
+        };
+      });
   }
-
 }

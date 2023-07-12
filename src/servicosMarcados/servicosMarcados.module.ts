@@ -7,10 +7,6 @@ import { ServicosMarcadosService } from './servicosMarcados.service';
 @Module({
   imports: [DatabaseModule],
   controllers: [ServicosMarcadosController],
-  providers: [
-    ...servicosMarcadosProviders,
-    ServicosMarcadosService,
-  ],
+  providers: [...servicosMarcadosProviders, ServicosMarcadosService],
 })
-
-export class ServicosMarcadosModule { }
+export class ServicosMarcadosModule {}

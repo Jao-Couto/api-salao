@@ -1,5 +1,5 @@
 import { Atendimentos } from 'src/atendimentos/atendimentos.entity';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 
 @Entity()
 export class Pagos {
@@ -9,5 +9,6 @@ export class Pagos {
   @Column('datetime')
   dataPago: string;
 
-  @ManyToOne(type => Atendimentos, atendimento => atendimento.id) atendimento: number;
+  @ManyToOne(() => Atendimentos, (atendimento) => atendimento.id)
+  atendimento: number;
 }

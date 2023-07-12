@@ -8,5 +8,5 @@ export interface ClienteCadastrarDto {
   cidade: string;
   celular: string;
   nascimento: string;
-  usuario: number
+  usuario: number;
 }

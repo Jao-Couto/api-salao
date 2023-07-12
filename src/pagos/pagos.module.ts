@@ -7,9 +7,6 @@ import { PagosService } from './pagos.service';
 @Module({
   imports: [DatabaseModule],
   controllers: [PagosController],
-  providers: [
-    ...pagosProviders,
-    PagosService,
-  ],
+  providers: [...pagosProviders, PagosService],
 })
 export class PagosModule {}

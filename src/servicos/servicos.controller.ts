@@ -8,23 +8,23 @@ import { ServicosCadastrarDto } from './dto/servicos.cadastrar.dto';
 export class ServicosController {
   constructor(private readonly servicosService: ServicosService) {}
 
-    @Get('listar/:user')
-    async listar(@Param("user") user:number): Promise<Servicos[]>{
-        return this.servicosService.listar(user)
-    }
+  @Get('listar/:user')
+  async listar(@Param('user') user: number): Promise<Servicos[]> {
+    return this.servicosService.listar(user);
+  }
 
-    @Post('cadastrar')
-    async cadastrar(@Body() data: ServicosCadastrarDto): Promise<ResultadoDto>{
-        return this.servicosService.cadastrar(data)
-    }
+  @Post('cadastrar')
+  async cadastrar(@Body() data: ServicosCadastrarDto): Promise<ResultadoDto> {
+    return this.servicosService.cadastrar(data);
+  }
 
-    @Get('id/:id')
-    async listarID(@Param('id') id: number): Promise<Servicos>{
-        return this.servicosService.findOne(id)
-    }
+  @Get('id/:id')
+  async listarID(@Param('id') id: number): Promise<Servicos> {
+    return this.servicosService.findOne(id);
+  }
 
-    @Delete('delete/:id')
-    async deletarId(@Param('id') id:number): Promise<ResultadoDto>{
-        return this.servicosService.deletarId(id)
-    }
+  @Delete('delete/:id')
+  async deletarId(@Param('id') id: number): Promise<ResultadoDto> {
+    return this.servicosService.deletarId(id);
+  }
 }

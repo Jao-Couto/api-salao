@@ -7,9 +7,6 @@ import { ServicosService } from './servicos.service';
 @Module({
   imports: [DatabaseModule],
   controllers: [ServicosController],
-  providers: [
-    ...servicosProviders,
-    ServicosService,
-  ],
+  providers: [...servicosProviders, ServicosService],
 })
 export class ServicosModule {}

@@ -7,9 +7,6 @@ import { PendentesService } from './pendentes.service';
 @Module({
   imports: [DatabaseModule],
   controllers: [PendentesController],
-  providers: [
-    ...pendentesProviders,
-    PendentesService,
-  ],
+  providers: [...pendentesProviders, PendentesService],
 })
 export class PendentesModule {}

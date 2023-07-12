@@ -11,59 +11,60 @@ export class UsuarioService {
   constructor(
     @Inject('USUARIO_REPOSITORY')
     private usuarioRepository: Repository<Usuario>,
-  ) { }
+  ) {}
 
   async listar(): Promise<Usuario[]> {
     return this.usuarioRepository.find();
   }
 
   async login(data: UsuarioLoginDto): Promise<ResultadoDto> {
-    let usuario = this.usuarioRepository.findOne({
-      email: data.email
+    const usuario = this.usuarioRepository.findOne({
+      email: data.email,
     });
 
-    if (await usuario != undefined) {
-      let isMatch = await compare(data.senha, (await usuario).senha);
-      let id = (await usuario).id
+    if ((await usuario) != undefined) {
+      const isMatch = await compare(data.senha, (await usuario).senha);
+      const id = (await usuario).id;
       if (isMatch)
         return <ResultadoDto>{
           status: true,
-          mensagem: id.toString()
-        }
+          mensagem: id.toString(),
+        };
     } else
       return <ResultadoDto>{
         status: false,
-        mensagem: "Senha e/ou email incorreto"
-      }
+        mensagem: 'Senha e/ou email incorreto',
+      };
   }
 
   async findOne(id: number): Promise<Usuario> {
     return this.usuarioRepository.findOne({
-      id: id
+      id: id,
     });
   }
 
   async cadastrar(data: UsuarioCadastrarDto): Promise<ResultadoDto> {
-    let usuario = new Usuario();
-    usuario.nome = data.nome
-    usuario.cpf = data.cpf
-    usuario.email = data.email
+    const usuario = new Usuario();
+    usuario.nome = data.nome;
+    usuario.cpf = data.cpf;
+    usuario.email = data.email;
     const salt = await genSalt();
     const senha = await hash(data.senha, salt);
-    usuario.senha = senha
+    usuario.senha = senha;
 
-    return this.usuarioRepository.save(usuario)
-      .then((result) => {
+    return this.usuarioRepository
+      .save(usuario)
+      .then(() => {
         return <ResultadoDto>{
           status: true,
-          mensagem: "Usuario cadastrado"
-        }
+          mensagem: 'Usuario cadastrado',
+        };
       })
       .catch((error) => {
         return <ResultadoDto>{
           status: false,
-          mensagem: "Houve um erro no cadastro do usuario"
-        }
-      })
+          mensagem: 'Houve um erro no cadastro do usuario ' + error,
+        };
+      });
   }
 }
